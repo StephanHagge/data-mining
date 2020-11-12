@@ -1,0 +1,21 @@
+version: '2'
+
+# This compose file is for starting the jupyter server and mounting datafiles into it.
+# Place the data csv into a "data" folder wich you need to create in the root dir of the git-project.
+
+# Connect to the notebook with http://127.0.0.1:8888/?token=123
+
+services:
+  datascience-notebook:
+    build:
+      context: .
+      dockerfile: Dockerfile_jupyter
+    volumes:
+      - ./data/:/data
+    ports:
+      - "8888:8888"
+    container_name: jupyter_notebook
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    command: "start-notebook.sh --NotebookApp.token=123"
+
