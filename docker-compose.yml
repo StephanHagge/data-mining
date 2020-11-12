@@ -9,7 +9,7 @@ services:
   datascience-notebook:
     build:
       context: .
-      dockerfile: Dockerfile_jupyter
+      dockerfile: Dockerfile
     volumes:
       - ./data/:/data
     ports:
