@@ -1,9 +1,5 @@
 *.code-workspace
-data/
 .vscode/
-
-# airport data
-*.csv
 
 # Compiled class file
 *.class
