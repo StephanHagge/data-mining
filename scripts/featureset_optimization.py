@@ -1,9 +1,6 @@
 from pandas import DataFrame
-from xgboost import XGBClassifier
-from sklearn.neighbors import KNeighborsClassifier
 from sklearn import preprocessing
-from sklearn.metrics import accuracy_score, precision_score, recall_score
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from itertools import combinations
@@ -12,6 +9,7 @@ import numpy as np
 
 from datetime import datetime
 from datetime import timedelta
+
 
 # Data preperation
 
@@ -28,13 +26,12 @@ df['publish_month'] = df['publish_time'].map(lambda x: x.month)
 df['publish_year'] = df['publish_time'].map(lambda x: x.year)
 df['publish_day_of_month'] = df['publish_time'].map(lambda x: x.day)
 df['publish_weekday'] = df['publish_time'].map(lambda x: x.weekday()) # 0: Monday, 6: Sunday
-#df['trending_weekday'] = df['trending_date'].map(lambda x: x.weekday()) # 0: Monday, 6: Sunday
 
 df['like_dislike_ratio'] = df.apply(lambda row: row['likes'] / (row['dislikes'] + 1), axis=1)
 df['like_view_ratio'] = df.apply(lambda row: row['likes'] / (row['views'] + 1), axis=1)
 
 df['ratings'] = df['likes'] + df['dislikes']
-df['likes_per_rating'] = df['likes'] / df['ratings']
+df['likes_per_rating'] = df.apply(lambda row: 0 if row['ratings'] == 0 else row['likes'] / row['ratings'], axis=1)
 df['ratings_per_view'] = df['ratings'] / df['views']
 df['comments_per_view'] = df['comment_count'] / df['views']
 
@@ -52,6 +49,22 @@ def assign_target_category(row):
         return 6
 
 df['target_category'] = df.apply(assign_target_category, axis=1)
+df['channel_title'] = df['channel_title'].astype('category')
+
+
+# Map tag score
+
+tag_df = pd.read_csv('./data/tags.csv')
+tag_df = tag_df.set_index('tag')
+def calculate_tag_factor(tag_string, tag_data):
+    tag_list = pd.Series(list(set(map(lambda x: x.strip('\"').lower(), tag_string.split('|')))))
+    return tag_list.apply(lambda tag: tag_data['factor'].get(tag, np.nan)).mean(skipna=True)
+    
+df['tag_factors'] = df['tags'].apply(lambda x: calculate_tag_factor(x, tag_df))
+df['tag_factors'] = df.apply(lambda row: 0 if np.isnan(row['tag_factors']) else row['tag_factors'], axis=1)
+
+
+# Remove unneccessary columns
 
 N = len(df)
 dropColumns = ['video_id', 'title', 'tags', 'thumbnail_link', 'description']
@@ -66,8 +79,6 @@ for column in df.columns:
         
 df.drop(columns=dropColumns, inplace=True)
 
-df['channel_title'] = df['channel_title'].astype('category')
-
 
 # Target encoding
 
@@ -81,7 +92,7 @@ y = y_label_encoder.transform(target)
 best_featureset = []
 best_accuracy = 0
 
-for i in range(1, 6):
+for i in range(1, 4):
     featuresets = combinations(df.columns, i)
     print('--------------------')
     print('Training with ' + str(i) + ' features')
@@ -121,8 +132,7 @@ for i in range(1, 6):
         
         # Choose classifier
 
-        # classifier = XGBClassifier(use_label_encoder=False, verbosity=0)
-        classifier = XGBClassifier(n_estimators=50, max_depth=2, use_label_encoder=False, verbosity=0)
+        classifier = RandomForestClassifier(n_estimators=10, max_depth=2, min_samples_split=5)
 
 
         # Train classifier
@@ -152,4 +162,4 @@ for i in range(1, 6):
 print('----------------------------------------')
 print('Best accuracy was: ' + str(best_accuracy))
 print('Best featureset was:')
-print(featureset)
+print(best_featureset)
