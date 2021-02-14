@@ -52,7 +52,7 @@ df['target_category'] = df.apply(assign_target_category, axis=1)
 df['channel_title'] = df['channel_title'].astype('category')
 
 
-# Map tag score
+# Map tag factor
 
 tag_df = pd.read_csv('./data/tags.csv')
 tag_df = tag_df.set_index('tag')
