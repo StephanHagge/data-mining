@@ -2,6 +2,7 @@ from pandas import DataFrame
 from sklearn import preprocessing
 from sklearn.metrics import accuracy_score
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 from itertools import combinations
 import pandas as pd
@@ -92,7 +93,7 @@ y = y_label_encoder.transform(target)
 best_featureset = []
 best_accuracy = 0
 
-for i in range(1, 4):
+for i in range(1, 5):
     featuresets = combinations(df.columns, i)
     print('--------------------')
     print('Training with ' + str(i) + ' features')
@@ -132,8 +133,14 @@ for i in range(1, 4):
         
         # Choose classifier
 
-        classifier = RandomForestClassifier(n_estimators=10, max_depth=2, min_samples_split=5)
+        # Fast random forest
+        # classifier = RandomForestClassifier(n_jobs=-1, n_estimators=10, max_depth=2, min_samples_split=5)
 
+        # Optimized random forest (slow)
+        # classifier = RandomForestClassifier(n_jobs=-1, class_weight=None, criterion='gini', max_depth=9, max_features='log2', max_leaf_nodes=None, min_impurity_decrease=0.0, min_samples_leaf=1, min_samples_split=4, min_weight_fraction_leaf=0.0, n_estimators=200)
+        
+        # Optimized decision tree
+        classifier = DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=None, max_features=None, max_leaf_nodes=50, min_impurity_decrease=0.0, min_samples_leaf=1, min_samples_split=2, min_weight_fraction_leaf=0.0, splitter='best')
 
         # Train classifier
 
