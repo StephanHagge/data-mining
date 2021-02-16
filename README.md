@@ -1,5 +1,5 @@
 # Data Mining
-This repository was created as part of the Data Mining course of the Computer Science master’s program.
+This repository was created as part of the Data Mining course of the Computer Science master’s program at [TH Köln](https://www.th-koeln.de/en/).
 
 ## Description
 **TODO *What is this repository about?***
