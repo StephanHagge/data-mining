@@ -11,7 +11,7 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./data/:/data
+      - ./0_data/:/data
     ports:
       - "8888:8888"
     container_name: jupyter_notebook
