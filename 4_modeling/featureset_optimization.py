@@ -55,7 +55,7 @@ df['channel_title'] = df['channel_title'].astype('category')
 
 # Map tag factor
 
-tag_df = pd.read_csv('../0_data/tags.csv')
+tag_df = pd.read_csv('../0_data/DEtags.csv')
 tag_df = tag_df.set_index('tag')
 def calculate_tag_factor(tag_string, tag_data):
     tag_list = pd.Series(list(set(map(lambda x: x.strip('\"').lower(), tag_string.split('|')))))
