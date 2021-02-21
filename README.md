@@ -21,4 +21,16 @@ Notebooks and scripts for the application of prediction models, as well as the o
 Notebooks for working out acquired insights and pecularities, as well as the visual representation of these.
 
 ## Requirements
-**TODO *List of required software and packages***
+**Programs**:
+- [Python](https://www.python.org/) ``3.x``
+- [Jupyter](https://jupyter.org/)
+
+**Additional Python packages**:
+- numpy
+- pandas
+- scipy
+- mathplotlib
+- seaborn
+- pycountry
+- sklearn
+- xgboost
