@@ -1,3 +1,9 @@
+# This script is used to determine an optimal set of features for the prediction with a given algorithm.
+# For this purpose, all possible combinations with the given number of features are tested and the best of these is determined.
+# It should be noted that an increased number of features in the data set,
+# but above all an increased maximum number of features for the predictions, mean an extreme increase in the execution time required.
+# It is recommended to use a particularly lightweight algorithm with a very limited maximum size of the feature set.
+
 from pandas import DataFrame
 from sklearn import preprocessing
 from sklearn.metrics import accuracy_score
