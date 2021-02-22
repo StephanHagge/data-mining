@@ -7,7 +7,7 @@ For our project we chose the [Trending YouTube Video Statistics](https://www.kag
 
 The dataset describes trending YouTube videos over several months, but the data is separated into multiple subsets due to differences in
 their category_id attribute based on the given region. Due to the high number of possible data, and the resulting complexity we decided
-to use the data related to the region DE (Germany) only.
+to use the data related to the region DE (Germany) mainly.
 
 The chosen dataset for [Germany](https://www.kaggle.com/datasnaek/youtube-new?select=DEvideos.csv) consists of 16 columns and 40840 rows.
 
